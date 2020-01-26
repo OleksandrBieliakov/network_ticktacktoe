@@ -8,17 +8,16 @@ public class GameConsole {
     private ClientSocket clientSocket;
     private int board = 0;
     private boolean isX = false;
+    Scanner scanner;
 
     public GameConsole(ClientSocket clientSocket) {
         this.clientSocket = clientSocket;
+        scanner = new Scanner(System.in);
     }
 
     private String scanCommand() {
         System.out.println("Enter command (LIST, PLAY, LOGOUT)");
-        Scanner scanner = new Scanner(System.in);
-        String command = scanner.nextLine();
-        scanner.close();
-        return command;
+        return scanner.nextLine();
     }
 
     private boolean isValidCommand(String command) {
@@ -98,9 +97,7 @@ public class GameConsole {
 
     private int scanPosition() {
         System.out.println("Enter index of a free cell (1-9)");
-        Scanner scan = new Scanner(System.in);
-        int position = scan.nextInt();
-        scan.close();
+        int position = scanner.nextInt();
         return position;
     }
 

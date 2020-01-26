@@ -16,7 +16,7 @@ public class PlayerEntry {
         String[] parts = line.split(" ");
         this.playerID = Integer.parseInt(parts[0]);
         this.address = parts[1];
-        this.port = Integer.parseInt(parts[1]);
+        this.port = Integer.parseInt(parts[2]);
     }
 
     public int getPlayerID() {
