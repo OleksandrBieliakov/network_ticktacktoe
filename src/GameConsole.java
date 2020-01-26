@@ -49,10 +49,10 @@ public class GameConsole {
         }
         System.out.println("Opponent ID: " + matchInfo.get(0));
         if (matchInfo.get(1) == 2) {
-            System.out.println("You are playing as 0 (you start second");
+            System.out.println("You are playing as 0 (you start second)");
             displayBoard(board);
         } else {
-            System.out.println("You are playing as X (you start first");
+            System.out.println("You are playing as X (you start first)");
             isX = true;
             displayBoard(board);
             makeTurn();
@@ -73,6 +73,7 @@ public class GameConsole {
         List<Integer> state = clientSocket.getGameStatus();
         int position = state.get(0);
         board = makeTurn(board, position, !isX);
+        System.out.println("Opponent's turn:");
         displayBoard(board);
         boolean gameContinues = true;
         if (state.size() > 1) {
@@ -97,8 +98,7 @@ public class GameConsole {
 
     private int scanPosition() {
         System.out.println("Enter index of a free cell (1-9)");
-        int position = scanner.nextInt();
-        return position;
+        return scanner.nextInt();
     }
 
     private void logout() {

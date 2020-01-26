@@ -37,7 +37,9 @@ public class ServerLogic {
     }
 
     public synchronized Match reRequestMatchmaking(int playerID) {
-        matches.put(lobby.getMatchID(), lobby);
+        if (lobby != null) {
+            matches.put(lobby.getMatchID(), lobby);
+        }
         return lobby;
     }
 
