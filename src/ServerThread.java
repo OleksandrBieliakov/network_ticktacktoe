@@ -140,11 +140,11 @@ public class ServerThread extends Thread {
             command = receiveCommand();
 
             if (command != null) {
-                if (command.equals(Command.LIST.toString())) {
+                if (command.equals(Command.LIST.name())) {
                     list();
-                } else if (command.equals(Command.PLAY.toString())) {
+                } else if (command.equals(Command.PLAY.name())) {
                     play();
-                } else if (command.equals(Command.LOGOUT.toString())) {
+                } else if (command.equals(Command.LOGOUT.name())) {
                     logout();
                     break;
                 }

@@ -122,10 +122,4 @@ public class ClientSocket {
         }
     }
 
-    public static void main(String[] args) {
-        String address = args[0];
-        int port = Integer.parseInt(args[1]);
-        new ClientSocket(address, port);
-    }
-
 }
