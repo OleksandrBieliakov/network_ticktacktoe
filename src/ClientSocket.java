@@ -46,12 +46,17 @@ public class ClientSocket {
         try {
             out.println(Command.LIST);
             String line;
+            //todo: exit from loop
             while ((line = in.readLine()) != null) {
-                players.add(new PlayerEntry(line));
+                System.out.println("line = " + line);
+                PlayerEntry playerEntry = new PlayerEntry(line);
+                System.out.println("playerEntry = " + playerEntry);
+                players.add(playerEntry);
             }
         } catch (Exception e) {
             System.out.println("Error during list requesting");
         }
+        System.out.println("players.size() = " + players.size());
         return players;
     }
 
