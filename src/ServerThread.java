@@ -31,6 +31,7 @@ public class ServerThread extends Thread {
             for (PlayerEntry playerEntry : serverLogic.getPlayers()) {
                 out.println(playerEntry);
             }
+            out.println("END");
         } catch (Exception e) {
             System.out.println("Error during sending the list of players");
         }
