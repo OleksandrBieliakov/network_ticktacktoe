@@ -40,7 +40,9 @@ public class ServerLogic {
         if (lobby != null) {
             matches.put(lobby.getMatchID(), lobby);
         }
-        return lobby;
+        Match match = lobby;
+        lobby = null;
+        return match;
     }
 
 }

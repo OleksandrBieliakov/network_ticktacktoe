@@ -8,7 +8,7 @@ public class GameConsole {
     private ClientSocket clientSocket;
     private int board = 0;
     private boolean isX = false;
-    Scanner scanner;
+    private Scanner scanner;
 
     public GameConsole(ClientSocket clientSocket) {
         this.clientSocket = clientSocket;
@@ -17,7 +17,7 @@ public class GameConsole {
 
     private String scanCommand() {
         System.out.println("Enter command (LIST, PLAY, LOGOUT)");
-        return scanner.nextLine();
+        return scanner.nextLine().toUpperCase();
     }
 
     private boolean isValidCommand(String command) {
@@ -42,6 +42,7 @@ public class GameConsole {
     }
 
     private void play() {
+        board = 0;
         List<Integer> matchInfo = clientSocket.requestOpponent();
         if (matchInfo == null) {
             System.out.println("Match not found");

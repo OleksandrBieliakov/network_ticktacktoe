@@ -65,6 +65,14 @@ public class ServerThread extends Thread {
     }
 
     private boolean sendGameStatus() {
+        while (!currentMatch.gameEnded() && !currentMatch.hasOpponentMadeTurn(playerID)) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         boolean gameEnded = false;
         try {
             String message = currentMatch.opponentLastTurn(playerID) + "";
@@ -91,7 +99,7 @@ public class ServerThread extends Thread {
         if (currentMatch.hasFirstTurn(playerID)) {
             receiveTurn();
         }
-        while (sendGameStatus()) {
+        while (!sendGameStatus()) {
             receiveTurn();
         }
     }

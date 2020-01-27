@@ -27,6 +27,8 @@ public class Match {
     private boolean draw = false;
     private int turnCounter = 0;
     private int board = 0;
+    private int playerXLastTurn;
+    private int player0LastTurn;
 
     public Match(PlayerEntry playerX, PlayerEntry player0) {
         matchID = nextID();
@@ -50,24 +52,39 @@ public class Match {
         return playerX.getPlayerID() == playerID;
     }
 
+    public synchronized boolean hasOpponentMadeTurn(int playerID) {
+        if (turnCounter == 0) {
+            return false;
+        }
+        boolean result;
+        if (playerX.getPlayerID() == playerID) {
+            result = turnCounter == player0LastTurn;
+        } else {
+            result = turnCounter == playerXLastTurn;
+        }
+        return result;
+    }
+
     // the information about the board state is stored in a single integer and updated using binary shift operations
     // (board state implementation from my ticktacktoe project from first semester)
-    public void submitTurn(int playerID, int position) {
+    public synchronized void submitTurn(int playerID, int position) {
+        turnCounter++;
         int numSymbol;
         if (playerX.getPlayerID() == playerID) {
             lastPlayerXCell = position;
             numSymbol = TURN_X;
+            playerXLastTurn = turnCounter;
         } else {
             lastPlayer0Cell = position;
             numSymbol = TURN_0;
+            player0LastTurn = turnCounter;
         }
         numSymbol <<= (position - 1) * 2;
         board = board | numSymbol;
-        turnCounter++;
     }
 
     // the information about the board state is stored in a single integer and win condition is checked by comparing the board with sets of all possible win conditions
-    private void checkWinCondition() {
+    private synchronized void checkWinCondition() {
         for (int win : WIN_X) {
             if ((board & win) == win) {
                 playerXWon = true;
@@ -85,7 +102,7 @@ public class Match {
         }
     }
 
-    public int opponentLastTurn(int playerID) {
+    public synchronized int opponentLastTurn(int playerID) {
         int turn;
         if (playerID == playerX.getPlayerID()) {
             turn = lastPlayer0Cell;
@@ -95,7 +112,11 @@ public class Match {
         return turn;
     }
 
-    public int matchResult(int playerID) {
+    public synchronized boolean gameEnded() {
+        return draw || playerXWon || player0Won;
+    }
+
+    public synchronized int matchResult(int playerID) {
         checkWinCondition();
         int result;
         if (draw) {
@@ -123,13 +144,14 @@ public class Match {
         if (this == o) return true;
         if (!(o instanceof Match)) return false;
         Match match = (Match) o;
-        return playerX.equals(match.playerX) &&
+        return getMatchID() == match.getMatchID() &&
+                playerX.equals(match.playerX) &&
                 player0.equals(match.player0);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(playerX, player0);
+        return Objects.hash(getMatchID(), playerX, player0);
     }
 
 }
