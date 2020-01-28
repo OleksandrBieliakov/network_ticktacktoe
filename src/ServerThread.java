@@ -62,7 +62,7 @@ public class ServerThread extends Thread {
         try {
             int cell = Integer.parseInt(in.readLine());
             currentMatch.submitTurn(playerID, cell);
-            udpServer.broadcast("Match " + currentMatch.getMatchID() + ": player " + playerID + " - " + cell);
+            udpServer.broadcast("Match " + currentMatch.getMatchID() + " player " + playerID + " ("+ (currentMatch.hasFirstTurn(playerID) ? "X" : "0") + ") - " + cell);
         } catch (Exception e) {
             System.out.println("Error during receiving turn");
         }
@@ -84,11 +84,11 @@ public class ServerThread extends Thread {
             if (matchResult == 1) {
                 message = message + " WIN";
                 gameEnded = true;
-                udpServer.broadcast("Match " + currentMatch.getMatchID() + ":  player " + playerID + " won");
+                udpServer.broadcast("Match " + currentMatch.getMatchID() + " player " + playerID + " won");
             } else if (matchResult == 2) {
                 message = message + " LOSE";
                 gameEnded = true;
-                udpServer.broadcast("Match " + currentMatch.getMatchID() + ":  player " + playerID + " lost");
+                udpServer.broadcast("Match " + currentMatch.getMatchID() + " player " + playerID + " lost");
             } else if (matchResult == 3) {
                 message = message + " DRAW";
                 gameEnded = true;

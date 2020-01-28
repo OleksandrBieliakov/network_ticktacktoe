@@ -35,7 +35,6 @@ public class Viewer {
         } catch (Exception e) {
             System.out.println("Error during introducing");
         }
-        System.out.println("Introduced");
     }
 
     private void receiveInfo() {
@@ -48,16 +47,6 @@ public class Viewer {
         }
         String info = new String(packet.getData(), 0, packet.getLength()).trim();
         System.out.println(info);
-    }
-
-    private void logout() {
-        byte[] queryBuff = "LOGOUT".getBytes();
-        DatagramPacket query = new DatagramPacket(queryBuff, queryBuff.length, serverAddress, serverPort);
-        try {
-            socket.send(query);
-        } catch (Exception e) {
-            System.out.println("Error during logout");
-        }
     }
 
     public static void main(String[] args) {
