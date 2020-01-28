@@ -10,9 +10,9 @@ public class UDPServer {
     private DatagramSocket server;
     private Set<ViewerEntry> viewers = new HashSet<>();
 
-    public UDPServer() {
+    public UDPServer(int port) {
         try {
-            server = new DatagramSocket();
+            server = new DatagramSocket(port);
         } catch (SocketException e) {
             System.out.println("Error during creating UDP socket");
         }
@@ -35,7 +35,6 @@ public class UDPServer {
     public void listen() {
         new Thread(() -> {
             while (true) {
-                System.out.println("Listening");
                 byte[] buff = new byte[UDP.MAX_DATAGRAM_SIZE];
                 DatagramPacket datagram = new DatagramPacket(buff, buff.length);
 
@@ -51,7 +50,6 @@ public class UDPServer {
                     int viewerPort = datagram.getPort();
                     viewers.add(new ViewerEntry(viewerAddress, viewerPort));
                 }
-                System.out.println("Listened");
             }
         }).start();
     }

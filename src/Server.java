@@ -5,16 +5,17 @@ public class Server {
 
     private ServerSocket serverSocket;
     private ServerLogic serverLogic = new ServerLogic();
-    private UDPServer udpServer = new UDPServer();
+    private UDPServer udpServer;
 
-    public Server(int port) {
+    public Server(int portTCP, int portUDP) {
+        udpServer = new UDPServer(portUDP);
         try {
-            serverSocket = new ServerSocket(port);
+            serverSocket = new ServerSocket(portTCP);
         } catch (Exception e) {
             System.out.println("Could not listen");
             System.exit(-1);
         }
-        System.out.println("Server listens on port: " + port);
+        System.out.println("Server listens on ports: " + portTCP + "(TCP), " + portUDP + "(UDP)");
     }
 
     public void listen() {
@@ -34,8 +35,9 @@ public class Server {
     }
 
     public static void main(String[] args) {
-        int port = Integer.parseInt(args[0]);
-        new Server(port).listen();
+        int portTCP = Integer.parseInt(args[0]);
+        int portUDP = Integer.parseInt(args[1]);
+        new Server(portTCP, portUDP).listen();
     }
 
 }

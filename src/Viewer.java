@@ -39,7 +39,6 @@ public class Viewer {
     }
 
     private void receiveInfo() {
-        System.out.println("Receiving");
         byte[] buff = new byte[UDP.MAX_DATAGRAM_SIZE];
         DatagramPacket packet = new DatagramPacket(buff, buff.length);
         try {
@@ -49,7 +48,6 @@ public class Viewer {
         }
         String info = new String(packet.getData(), 0, packet.getLength()).trim();
         System.out.println(info);
-        System.out.println("Received");
     }
 
     private void logout() {
