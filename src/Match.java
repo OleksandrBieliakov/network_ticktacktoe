@@ -66,7 +66,6 @@ public class Match {
     }
 
     // the information about the board state is stored in a single integer and updated using binary shift operations
-    // (board state implementation from my ticktacktoe project from first semester)
     public synchronized void submitTurn(int playerID, int position) {
         turnCounter++;
         int numSymbol;

@@ -47,7 +47,7 @@ public class ServerThread extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            match = serverLogic.reRequestMatchmaking(playerID);
+            match = serverLogic.reRequestMatchmaking();
         }
         currentMatch = match;
         try {

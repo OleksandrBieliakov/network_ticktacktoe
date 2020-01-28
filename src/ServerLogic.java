@@ -4,7 +4,6 @@ public class ServerLogic {
 
     private int nextID = 0;
     private Map<Integer, PlayerEntry> players = new HashMap<>();
-    private Map<Integer, Match> matches = new HashMap<>();
     private PlayerEntry playerWaitingToPlay = null;
     private Match lobby = null;
 
@@ -36,10 +35,7 @@ public class ServerLogic {
         return match;
     }
 
-    public synchronized Match reRequestMatchmaking(int playerID) {
-        if (lobby != null) {
-            matches.put(lobby.getMatchID(), lobby);
-        }
+    public synchronized Match reRequestMatchmaking() {
         Match match = lobby;
         lobby = null;
         return match;
