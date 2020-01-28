@@ -7,16 +7,18 @@ import java.util.concurrent.TimeUnit;
 public class ServerThread extends Thread {
 
     private ServerLogic serverLogic;
+    private UDPServer udpServer;
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
     private int playerID;
     private Match currentMatch;
 
-    public ServerThread(Socket socket, ServerLogic serverLogic) {
+    public ServerThread(Socket socket, ServerLogic serverLogic, UDPServer udpServer) {
         super();
         this.socket = socket;
         this.serverLogic = serverLogic;
+        this.udpServer = udpServer;
         try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
@@ -50,6 +52,7 @@ public class ServerThread extends Thread {
         currentMatch = match;
         try {
             out.println(currentMatch.getOpponentID(playerID) + " " + (currentMatch.hasFirstTurn(playerID) ? 1 : 2)); // 1 - first turn, 2 - second turn
+            udpServer.broadcast("Match " + currentMatch.getMatchID() + " started (player " + playerID + ")");
         } catch (Exception e) {
             System.out.println("Error during matchmaking");
         }
@@ -59,6 +62,7 @@ public class ServerThread extends Thread {
         try {
             int cell = Integer.parseInt(in.readLine());
             currentMatch.submitTurn(playerID, cell);
+            udpServer.broadcast("Match " + currentMatch.getMatchID() + ": player " + playerID + " - " + cell);
         } catch (Exception e) {
             System.out.println("Error during receiving turn");
         }
@@ -80,12 +84,15 @@ public class ServerThread extends Thread {
             if (matchResult == 1) {
                 message = message + " WIN";
                 gameEnded = true;
+                udpServer.broadcast("Match " + currentMatch.getMatchID() + ":  player " + playerID + " won");
             } else if (matchResult == 2) {
                 message = message + " LOSE";
                 gameEnded = true;
+                udpServer.broadcast("Match " + currentMatch.getMatchID() + ":  player " + playerID + " lost");
             } else if (matchResult == 3) {
                 message = message + " DRAW";
                 gameEnded = true;
+                udpServer.broadcast("Match " + currentMatch.getMatchID() + " draw (player " + playerID + ")");
             }
             out.println(message);
         } catch (Exception e) {
@@ -107,6 +114,7 @@ public class ServerThread extends Thread {
     private void logout() {
         try {
             serverLogic.removePlayer(playerID);
+            udpServer.broadcast("Player " + playerID + " logged out");
         } catch (Exception e) {
             System.out.println("Error during logout");
         }
@@ -126,6 +134,7 @@ public class ServerThread extends Thread {
             playerID = serverLogic.nextID();
             serverLogic.addPlayer(playerID, socket.getInetAddress().toString(), socket.getPort());
             out.println(playerID);
+            udpServer.broadcast("Player " + playerID + " logged in");
         } catch (Exception e) {
             System.out.println("Error during sending playerID");
         }

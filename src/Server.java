@@ -3,8 +3,9 @@ import java.net.Socket;
 
 public class Server {
 
-    ServerSocket serverSocket;
-    ServerLogic serverLogic = new ServerLogic();
+    private ServerSocket serverSocket;
+    private ServerLogic serverLogic = new ServerLogic();
+    private UDPServer udpServer = new UDPServer();
 
     public Server(int port) {
         try {
@@ -17,6 +18,7 @@ public class Server {
     }
 
     public void listen() {
+        udpServer.listen();
         while (true) {
             Socket client = null;
             try {
@@ -26,7 +28,7 @@ public class Server {
                 System.exit(-1);
             }
             if (client != null) {
-                (new ServerThread(client, serverLogic)).start();
+                (new ServerThread(client, serverLogic, udpServer)).start();
             }
         }
     }
